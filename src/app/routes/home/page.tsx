@@ -1,5 +1,5 @@
 'use client'
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import JobCard from "@/app/components/UI/jobCard";
 import Navbar from "@/app/components/navbar";
 import {useAppDispatch, useAppSelector} from "@/lib/frontend/redux/hooks";
@@ -9,10 +9,27 @@ import Search from "@/app/components/UI/search";
 function Page() {
     const dispatch = useAppDispatch();
     const { items: jobs, loading, error } = useAppSelector((state) => state.jobs);
+    const [searchedJobs, setSearchedJobs] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         dispatch(getAllJobs());
     }, [dispatch]);
+
+
+    useEffect(() => {
+        if(searchTerm) {
+            setSearchedJobs(
+                jobs.filter((job) => job.title.toLowerCase().includes(searchTerm.toLowerCase()))
+            );
+        } else {
+            setSearchedJobs(jobs);
+        }
+    }, [searchTerm, jobs])
+
+    const handleSearch = (term) => {
+        setSearchTerm(term);
+    };
 
     if(loading) {
         return <p>Loading Data....</p>
@@ -45,11 +62,11 @@ function Page() {
                                     expert advice.</p>
                             </div>
                             <div>
-                                <Search />
+                                <Search onSearch={handleSearch}/>
                             </div>
                             <div
                                 className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                                {jobs.map((job) => (
+                                {searchedJobs.map((job) => (
                                     <JobCard key={job._id} title={job.title} location="Casablanca" type="Full Time"
                                              company="Cegidim"
                                              description="Responsible for developing and maintaining web applications."
