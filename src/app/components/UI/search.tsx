@@ -7,7 +7,7 @@ function Search({ onSearch }) {
         onSearch(searchTerm);
     }
     return (
-        <form className="max-w-md mx-auto pt-10" onSubmit={handlSearch}>
+        <form className="max-w-md  pt-10 w-[50%]" onSubmit={handlSearch}>
             <label htmlFor="default-search"
                    className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
             <div className="relative">
