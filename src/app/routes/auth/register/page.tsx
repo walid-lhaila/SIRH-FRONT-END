@@ -34,15 +34,15 @@ function Page() {
                                 <div id="clientForm" className="w-full">
                                     <form
                                         className="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2 ">
-                                        <Input label="First Name" name="firstName" placeholder="Walid" type="text" />
+                                        <Input label="First Name" name="firstName" placeholder="Walid" type="text" className="text-black" />
 
-                                        <Input label="Last Name" name="lastName" placeholder="Lhaila" type="text" />
+                                        <Input label="Last Name" name="lastName" placeholder="Lhaila" type="text" className="text-black" />
 
-                                        <Input label="Email Address" name="email" placeholder="example@gmail.com" type="email" />
+                                        <Input label="Email Address" name="email" placeholder="example@gmail.com" type="email" className="text-black" />
 
-                                        <Input label="Username" name="username" placeholder="example@1" type="text" />
+                                        <Input label="Username" name="username" placeholder="example@1" type="text" className="text-black" />
 
-                                        <Input label="Password" name="password" placeholder="***********" type="password" />
+                                        <Input label="Password" name="password" placeholder="***********" type="password" className="text-black" />
 
 
                                         <button type="submit"
