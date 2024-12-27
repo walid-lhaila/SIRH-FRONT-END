@@ -1,6 +1,10 @@
 import React from 'react';
+import UseGetAllCities from "@/app/hooks/useGetAllCities";
 
 function Filter() {
+        const { cities } = UseGetAllCities();
+        console.log(cities);
+
     return (
         <form className="max-w-sm w-[50%] flex items-center gap-4 pt-10">
 
@@ -8,13 +12,9 @@ function Filter() {
             <select id="states"
                     className="block w-full p-4 text-center text-sm text-gray-900 border bg-white border-gray-100 rounded-lg shadow-xl shadow-sky-100 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-200 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option selected>Location</option>
-                <option value="CA">California</option>
-                <option value="TX">Texas</option>
-                <option value="WH">Washinghton</option>
-                <option value="FL">Florida</option>
-                <option value="VG">Virginia</option>
-                <option value="GE">Georgia</option>
-                <option value="MI">Michigan</option>
+                {cities.map((city) => (
+                    <option key={city.name} value={city.name}>{city.name}</option>
+                ))}
             </select>
 
             <label htmlFor="states" className="sr-only">Contract type</label>
