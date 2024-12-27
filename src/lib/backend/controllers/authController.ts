@@ -33,5 +33,35 @@ export const AuthController = {
         }
     },
 
+    async login(req: NextApiRequest, res: NextApiResponse) {
+        try {
+            await dbConnect();
+            const { username, password } = req.body;
+            if(!username || !password) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'username and password are required'
+                });
+            }
+
+            const { user, token } = await AuthService.login(username, password);
+
+            return res.status(200).json({
+                success: 'true',
+                message: 'Login Successfully',
+                data: {
+                    user,
+                    token,
+                }
+            });
+        } catch (error) {
+            console.error('Login Failed:', error);
+            return res.status(500).json({
+                success: false,
+                message: 'Internal Server Error'
+            });
+        }
+    },
+
 };
 
