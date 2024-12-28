@@ -1,7 +1,28 @@
-import React from 'react';
+"use client"
+import React, {useState} from 'react';
 import Input from '@/app/components/UI/input';
 import Link from "next/link";
+import {useAppDispatch, useAppSelector} from "@/lib/frontend/redux/hooks";
+import {register} from "@/lib/frontend/redux/slices/authSlice";
 function Page() {
+    const dispatch = useAppDispatch();
+    const {isLoading, error} = useAppSelector((state) => state.auth);
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        username: '',
+        password: '',
+    });
+
+    const handleChange = (e: React.ChangeEvent<HTMLFormElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value});
+    };
+
+    const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        await dispatch(register(formData));
+    };
     return (
         <div>
             <section className="bg-gradient-to-t from-[#90d9f9] via-sky-50 to-sky-200 ">
@@ -33,17 +54,17 @@ function Page() {
                             <div id="forms-container"
                                  className="flex overflow-hidden transition-transform transform ease-in-out duration-500">
                                 <div id="clientForm" className="w-full">
-                                    <form
+                                    <form onSubmit={handleSubmit}
                                         className="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2 ">
-                                        <Input label="First Name" name="firstName" placeholder="Walid" type="text" className="text-black" />
+                                        <Input handleChange={handleChange} label="First Name" name="firstName" value={formData.firstName} placeholder="Walid" type="text" className="text-black" />
 
-                                        <Input label="Last Name" name="lastName" placeholder="Lhaila" type="text" className="text-black" />
+                                        <Input handleChange={handleChange} label="Last Name" name="lastName" value={formData.lastName} placeholder="Lhaila" type="text" className="text-black" />
 
-                                        <Input label="Email Address" name="email" placeholder="example@gmail.com" type="email" className="text-black" />
+                                        <Input handleChange={handleChange} label="Email Address" name="email" value={formData.email} placeholder="example@gmail.com" type="email" className="text-black" />
 
-                                        <Input label="Username" name="username" placeholder="example@1" type="text" className="text-black" />
+                                        <Input handleChange={handleChange} label="Username" name="username" value={formData.username} placeholder="example@1" type="text" className="text-black" />
 
-                                        <Input label="Password" name="password" placeholder="***********" type="password" className="text-black" />
+                                        <Input handleChange={handleChange} label="Password" name="password" value={formData.password} placeholder="***********" type="password" className="text-black" />
 
 
                                         <button type="submit"
@@ -58,6 +79,8 @@ function Page() {
                                                       clipRule="evenodd"/>
                                             </svg>
                                         </button>
+                                        {error && <p className="text-red-500 col-span-2">{error}</p>}
+
                                     </form>
                                     <div className="flex justify-center items-center mt-10 gap-3">
                                         <div className="w-48 h-[2px] bg-black"></div>
