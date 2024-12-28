@@ -4,9 +4,10 @@ import Input from '@/app/components/UI/input';
 import Link from "next/link";
 import {useAppDispatch, useAppSelector} from "@/lib/frontend/redux/hooks";
 import {register} from "@/lib/frontend/redux/slices/authSlice";
+import {toast} from "react-toastify";
 function Page() {
     const dispatch = useAppDispatch();
-    const {isLoading, error} = useAppSelector((state) => state.auth);
+    const {error} = useAppSelector((state) => state.auth);
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -22,6 +23,11 @@ function Page() {
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         await dispatch(register(formData));
+        if(register.fulfilled){
+            toast.success('registration successfully');
+        } else {
+            toast.error('Something Wrong');
+        }
     };
     return (
         <div>
