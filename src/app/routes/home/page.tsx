@@ -12,6 +12,8 @@ function Page() {
     const { items: jobs, loading, error } = useAppSelector((state) => state.jobs);
     const [searchedJobs, setSearchedJobs] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedLocation, setSelectedLocation] = useState('');
+    const [selectedType, setSelectedType] = useState('');
 
     useEffect(() => {
         dispatch(getAllJobs());
@@ -19,18 +21,33 @@ function Page() {
 
 
     useEffect(() => {
+        let filteredJobs = jobs;
         if(searchTerm) {
-            setSearchedJobs(
-                jobs.filter((job) => job.title.toLowerCase().includes(searchTerm.toLowerCase()))
-            );
-        } else {
-            setSearchedJobs(jobs);
+            filteredJobs = filteredJobs.filter((job) => job.title.toLowerCase().includes(searchTerm.toLowerCase()));
         }
-    }, [searchTerm, jobs])
+        if(selectedLocation) {
+            filteredJobs = filteredJobs.filter((job) => job.location.toLowerCase() === (selectedLocation.toLowerCase()));
+        }
+        if(selectedType) {
+            filteredJobs = filteredJobs.filter((job) => job.type.toLowerCase() === (selectedType.toLowerCase()));
+        }
 
-    const handleSearch = (term) => {
+        if(filteredJobs.length === 0) {
+            setSearchedJobs(jobs);
+        }else {
+            setSearchedJobs(filteredJobs);
+        }
+    }, [searchTerm, jobs, selectedType, selectedLocation])
+
+    const handleSearch = (term: string) => {
         setSearchTerm(term);
     };
+    const handleLocationChange = (location: string) => {
+        setSelectedLocation(location);
+    }
+    const handleTypeChange = (type: string) => {
+        setSelectedType(type);
+    }
 
     if(loading) {
         return <p>Loading Data....</p>
@@ -64,15 +81,15 @@ function Page() {
                             </div>
                             <div className="flex justify-center gap-10 items-center">
                                 <Search onSearch={handleSearch}/>
-                                <Filter />
+                                <Filter onLocationChange={handleLocationChange} onTypeChange={handleTypeChange} />
                             </div>
                             <div
                                 className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
                                 {searchedJobs.map((job) => (
-                                    <JobCard key={job._id} title={job.title} location="Casablanca" type="Full Time"
-                                             company="Cegidim"
-                                             description="Responsible for developing and maintaining web applications."
-                                             createdBy="Walid Lhaila"/>
+                                    <JobCard key={job._id} title={job.title} location={job.location} type={job.type}
+                                             company={job.company}
+                                             description={job.description}
+                                             createdBy={job.createdBy}/>
                                 ))}
                             </div>
                         </div>
