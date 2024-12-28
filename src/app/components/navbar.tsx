@@ -1,17 +1,27 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 function Navbar() {
+    const [username, setUsername] = useState('');
+    const [logged, setLogged] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const storedUsername = localStorage.getItem('username');
+        if (token) {
+            setLogged(true);
+            setUsername(storedUsername || '');
+        } else {
+            setLogged(false);
+            setUsername('');
+        }
+    }, []);
     return (
         <header className="absolute inset-x-0 top-0 z-50">
             <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
                 <div className="flex lg:flex-1">
                     <a href="#" className="-m-1.5 p-1.5">
                         <span className="sr-only">Your Company</span>
-                        <img
-                            className="h-8 w-auto"
-                            src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-                            alt="Company Logo"
-                        />
+                        <p className="text-3xl font-bold font-mono">CARRERS</p>
                     </a>
                 </div>
                 <div className="flex lg:hidden">
@@ -38,9 +48,13 @@ function Navbar() {
                     <a href="#" className="text-sm font-semibold leading-6 text-gray-900">OFFERS</a>
                 </div>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                    <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+                    {logged && username ? (
+                        <p className="text-black font-medium font-serif text-xl underline">{username}</p>
+                    ) : <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
                         Log in <span aria-hidden="true">&rarr;</span>
                     </a>
+                    }
+
                 </div>
             </nav>
             <div className="lg:hidden" role="dialog" aria-modal="true">
@@ -83,9 +97,16 @@ function Navbar() {
                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Company</a>
                             </div>
                             <div className="py-6">
-                                <a href="#"
-                                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50">Log
-                                    in</a>
+                                {logged && username ? (
+                                    <p>{username}</p>
+                                ) : (
+                                    <a
+                                        href="#"
+                                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                                    >
+                                        Log in
+                                    </a>
+                                )}
                             </div>
                         </div>
                     </div>

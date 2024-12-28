@@ -20,6 +20,7 @@ function Page() {
     }, [dispatch]);
 
 
+
     useEffect(() => {
         let filteredJobs = jobs;
         if(searchTerm) {
