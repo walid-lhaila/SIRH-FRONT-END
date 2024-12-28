@@ -1,8 +1,32 @@
-import React from 'react';
+"use client"
+import React, {useState} from 'react';
 import Link from 'next/link';
 import Input from '@/app/components/UI/input';
+import {useAppDispatch} from "@/lib/frontend/redux/hooks";
+import {login} from "@/lib/frontend/redux/slices/authSlice";
+import {toast} from "react-toastify";
+import {useRouter} from "next/navigation";
 
 function Page() {
+    const dispatch = useAppDispatch();
+    const router = useRouter();
+    const [formData, setFormData] = useState({
+        username: '',
+        password: '',
+    });
+    const handleChange = (e: React.ChangeEvent<HTMLFormElement>) => {
+        setFormData({...formData, [e.target.name]: e.target.value});
+    };
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const result = await dispatch(login(formData));
+        if(login.fulfilled.match(result)) {
+            toast.success('Login Successfully');
+            router.push('/routes/home');
+        } else {
+            toast.error('Invalid Credentials');
+        }
+    };
     return (
         <div
             className=" bg-gradient-to-t from-[#90d9f9] via-sky-50 to-sky-200  flex w-full max-w-sm mx-auto overflow-hidden rounded-lg shadow-md shadow-[#79C5EF]/70 mt-32 lg:max-w-6xl">
@@ -50,12 +74,12 @@ function Page() {
                     <span className="w-1/5 border-b dark:border-black lg:w-1/4"></span>
                 </div>
 
-                <form className="mt-4">
+                <form onSubmit={handleSubmit} className="mt-4">
 
-                    <Input label="Username" name="firstName" placeholder="" type="text" className="text-black" />
+                    <Input value={formData.username} handleChange={handleChange} label="Username" name="username" placeholder="Example-13" type="text" className="text-black" />
 
                     <div className="mt-4">
-                    <Input label="Password" name="firstName" placeholder="" type="text" className="text-black" />
+                    <Input value={formData.password} handleChange={handleChange} label="Password" name="password" placeholder="************" type="password" className="text-black" />
 
                     </div>
 

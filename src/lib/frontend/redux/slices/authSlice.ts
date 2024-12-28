@@ -1,6 +1,5 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios from "axios";
-import { toast } from "react-toastify";
 
 
 interface UserData {
@@ -11,8 +10,14 @@ interface UserData {
     password: string;
 }
 
+interface LoginData {
+    username: string;
+    password: string;
+}
+
 interface AuthState {
     user: any | null;
+    token: string;
     isLoading: boolean;
     error: string | null;
 }
@@ -29,8 +34,25 @@ export const register = createAsyncThunk(
     }
 );
 
+export const login = createAsyncThunk(
+    'auth/login',
+    async(loginData: LoginData, {rejectWithValue}) => {
+        try {
+            const response = await axios.post('http://localhost:3000/api/auth/login', loginData);
+            const { token, user } = response.data.data;
+            localStorage.setItem('token', token);
+            localStorage.setItem('username', user.username);
+            localStorage.setItem('id', user._id);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 const initialState: AuthState = {
     user: null,
+    token: null,
     isLoading: false,
     error: null,
 };
@@ -51,6 +73,19 @@ const authSlice = createSlice({
             })
             .addCase(register.rejected, (state, action) => {
                 state.isLoading= false;
+                state.error = action.payload as string;
+            })
+            .addCase(login.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(login.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.user = action.payload.data.user;
+                state.token = action.payload.data.token;
+            })
+            .addCase(login.rejected, (state, action) => {
+                state.isLoading = false;
                 state.error = action.payload as string;
             });
     },

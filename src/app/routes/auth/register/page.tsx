@@ -2,12 +2,13 @@
 import React, {useState} from 'react';
 import Input from '@/app/components/UI/input';
 import Link from "next/link";
-import {useAppDispatch, useAppSelector} from "@/lib/frontend/redux/hooks";
+import {useAppDispatch} from "@/lib/frontend/redux/hooks";
 import {register} from "@/lib/frontend/redux/slices/authSlice";
 import {toast} from "react-toastify";
+import {useRouter} from "next/navigation";
 function Page() {
     const dispatch = useAppDispatch();
-    const {error} = useAppSelector((state) => state.auth);
+    const router = useRouter()
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -25,6 +26,7 @@ function Page() {
         await dispatch(register(formData));
         if(register.fulfilled){
             toast.success('registration successfully');
+                router.push('/routes/auth/login');
         } else {
             toast.error('Something Wrong');
         }
@@ -85,7 +87,6 @@ function Page() {
                                                       clipRule="evenodd"/>
                                             </svg>
                                         </button>
-                                        {error && <p className="text-red-500 col-span-2">{error}</p>}
 
                                     </form>
                                     <div className="flex justify-center items-center mt-10 gap-3">
