@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import Input from '@/app/components/UI/input';
 
 function Page() {
@@ -69,7 +70,7 @@ function Page() {
                 <div className="flex items-center justify-between mt-4">
                     <span className="w-1/5 border-b dark:border-black md:w-1/4"></span>
 
-                    <div className="text-xs  uppercase text-black hover:underline">or sign up</div>
+                    <Link href="/routes/auth/register" className="text-xs  uppercase text-black hover:underline">or sign up</Link>
 
                     <span className="w-1/5 border-b dark:border-black md:w-1/4"></span>
                 </div>

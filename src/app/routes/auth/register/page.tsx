@@ -1,5 +1,6 @@
 import React from 'react';
 import Input from '@/app/components/UI/input';
+import Link from "next/link";
 function Page() {
     return (
         <div>
@@ -61,11 +62,11 @@ function Page() {
                                     <div className="flex justify-center items-center mt-10 gap-3">
                                         <div className="w-48 h-[2px] bg-black"></div>
                                         <div>
-                                            <div
+                                            <Link href="/routes/auth/login"
                                                 className="text-black cursor-pointer text-sm hover:underline font-serif">Or
                                                 Sign
                                                 in
-                                            </div>
+                                            </Link>
                                         </div>
                                         <div className="w-48 h-[2px] bg-black"></div>
                                     </div>

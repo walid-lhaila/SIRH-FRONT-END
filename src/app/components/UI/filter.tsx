@@ -22,6 +22,8 @@ function Filter({ onLocationChange, onTypeChange }) {
                 <option value="Full time">Full time</option>
                 <option value="Part time">Part time</option>
                 <option value="Internship">Internship</option>
+                <option value="CDI">CDI</option>
+                <option value="CDD">CDD</option>
                 <option value="Freelance">Freelance</option>
                 <option value="Consulting">Consulting</option>
                 <option value="Remote">Remote</option>
