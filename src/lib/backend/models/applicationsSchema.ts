@@ -7,6 +7,7 @@ interface IApplication extends Document {
     type: string;
     company: string;
     createdBy: string;
+    cv: string;
     status: 'pending' | 'accepted' | 'rejected';
     user: string;
 }
@@ -18,6 +19,7 @@ const applicationSchema = new Schema<IApplication>({
     type: { type: String, required: true },
     company: { type: String, required: true },
     createdBy: { type: String, required: true },
+    cv: { type: String, required: true },
     status: {
         type: String,
         enum: ['pending', 'accepted', 'rejected'],
