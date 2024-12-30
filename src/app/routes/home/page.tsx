@@ -23,22 +23,19 @@ function Page() {
 
     useEffect(() => {
         let filteredJobs = jobs;
-        if(searchTerm) {
-            filteredJobs = filteredJobs.filter((job) => job.title.toLowerCase().includes(searchTerm.toLowerCase()));
+        if (searchTerm) {
+            filteredJobs = filteredJobs.filter((job) => job.title?.toLowerCase().includes(searchTerm.toLowerCase()));
         }
-        if(selectedLocation) {
-            filteredJobs = filteredJobs.filter((job) => job.location.toLowerCase() === (selectedLocation.toLowerCase()));
+        if (selectedLocation) {
+            filteredJobs = filteredJobs.filter((job) => job.location?.toLowerCase() === selectedLocation.toLowerCase());
         }
-        if(selectedType) {
-            filteredJobs = filteredJobs.filter((job) => job.type.toLowerCase() === (selectedType.toLowerCase()));
+        if (selectedType) {
+            filteredJobs = filteredJobs.filter((job) => job.type?.toLowerCase() === selectedType.toLowerCase());
         }
 
-        if(filteredJobs.length === 0) {
-            setSearchedJobs(jobs);
-        }else {
-            setSearchedJobs(filteredJobs);
-        }
-    }, [searchTerm, jobs, selectedType, selectedLocation])
+        setSearchedJobs(filteredJobs.length === 0 ? jobs : filteredJobs);
+
+    }, [searchTerm, jobs, selectedType, selectedLocation]);
 
     const handleSearch = (term: string) => {
         setSearchTerm(term);
