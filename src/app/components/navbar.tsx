@@ -46,7 +46,7 @@ function Navbar() {
                 </div>
                 <div className="hidden lg:flex lg:gap-x-12">
                     <Link href="/routes/home" className="text-sm font-semibold leading-6 text-gray-900">HOME</Link>
-                    <Link href="/routes/home" className="text-sm font-semibold leading-6 text-gray-900">OFFERS</Link>
+                    <Link href="/routes/application" className="text-sm font-semibold leading-6 text-gray-900">OFFERS</Link>
                 </div>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
                     {logged && username ? (
