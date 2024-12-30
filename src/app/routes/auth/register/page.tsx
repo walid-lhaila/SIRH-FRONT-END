@@ -1,11 +1,11 @@
 "use client"
 import React, {useState} from 'react';
-import Input from '@/app/components/UI/input';
 import Link from "next/link";
 import {useAppDispatch} from "@/lib/frontend/redux/hooks";
 import {register} from "@/lib/frontend/redux/slices/authSlice";
 import {toast} from "react-toastify";
 import {useRouter} from "next/navigation";
+import Input from "@/app/components/UI/input";
 function Page() {
     const dispatch = useAppDispatch();
     const router = useRouter()
