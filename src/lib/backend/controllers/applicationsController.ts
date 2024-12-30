@@ -63,5 +63,41 @@ export const ApplicationsController = {
             };
         }
     },
+
+    async getApplicationByUserId (token: string) {
+        try {
+            await dbConnect();
+            const secretKey = process.env.JWT_SECRET;
+            const decoded = jwt.verify(token, secretKey) as { userId: string };
+
+            if (!decoded || !decoded.userId){
+                return {
+                    status: 401,
+                    data: {
+                        success: false,
+                        message: 'Invalid Token',
+                    },
+                };
+            }
+            const applications = await ApplicationsService.getApplicationByUserId(decoded.userId);
+            return {
+                status: 200,
+                data: {
+                    success: true,
+                    message: 'Application Retrieved Successfully',
+                    data: applications,
+                },
+            };
+        } catch (error) {
+            console.error('Failed To Retrieved Applications:', error);
+            return {
+                status: 500,
+                data: {
+                    success: false,
+                    message: 'Internal Server Error',
+                },
+            };
+        }
+    }
 };
 
