@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import Link from "next/link";
 
 function Navbar() {
     const [username, setUsername] = useState('');
@@ -44,8 +45,8 @@ function Navbar() {
                     </button>
                 </div>
                 <div className="hidden lg:flex lg:gap-x-12">
-                    <a href="#" className="text-sm font-semibold leading-6 text-gray-900">HOME</a>
-                    <a href="#" className="text-sm font-semibold leading-6 text-gray-900">OFFERS</a>
+                    <Link href="/routes/home" className="text-sm font-semibold leading-6 text-gray-900">HOME</Link>
+                    <Link href="/routes/home" className="text-sm font-semibold leading-6 text-gray-900">OFFERS</Link>
                 </div>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
                     {logged && username ? (
