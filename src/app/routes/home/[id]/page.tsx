@@ -1,8 +1,57 @@
 "use client"
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Navbar from "@/app/components/navbar";
+import {useAppDispatch, useAppSelector} from "@/lib/frontend/redux/hooks";
+import {getAllJobs} from "@/lib/frontend/redux/slices/jobSlice";
 
-function Page() {
+
+function Page({params} : {params: {id: string}}) {
+    const [loading, setLoading] = useState(true);
+    const [jobDetails, setJobDetails] = useState(null);
+    const {  items: allJobs, loading: jobsLoading } = useAppSelector((state) => state.jobs);
+    const dispatch = useAppDispatch();
+    const jobId = params.id;
+
+    useEffect(() => {
+        const fetchJobDetails = async () => {
+            if (allJobs.length === 0 && !jobsLoading) {
+                await dispatch(getAllJobs());
+            }
+            setLoading(false);
+        };
+        fetchJobDetails();
+    }, [dispatch, allJobs, jobsLoading]);
+
+    useEffect(() => {
+        if (allJobs.length > 0) {
+            const job = allJobs.find((job) => job._id === jobId);
+            setJobDetails(job);
+        }
+    }, [allJobs, jobId]);
+
+    if (loading || jobsLoading) {
+        return (
+            <>
+                <Navbar />
+                <div className="pt-24 w-[70%] mx-auto">
+                    <p>Loading job details ...</p>
+                </div>
+            </>
+        );
+    }
+
+    if (!jobDetails) {
+        return (
+            <>
+                <Navbar />
+                <div className="pt-24 w-[70%] mx-auto">
+                    <p>Job not found</p>
+                </div>
+            </>
+        );
+    }
+
+
     return (
         <>
             <Navbar/>
@@ -18,35 +67,36 @@ function Page() {
                     <h3 className="font-semibold text-5xl font-serif text-gray-900">Job Détails</h3>
                     <p className="mt-1 max-w-2xl text-sm/6 font-mono text-gray-700">Job details and application.</p>
                 </div>
-                <div className="mt-6 border-t border-gray-100">
+                <form className="mt-6 border-t border-gray-100">
+
                     <dl className="divide-y divide-gray-100">
                         <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <dt className="text-sm/6 font-medium text-gray-900">Title</dt>
-                            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">Margot Foster</dd>
+                            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">{jobDetails.title}</dd>
                         </div>
                         <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <dt className="text-sm/6 font-medium text-gray-900">Description</dt>
-                            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">Backend Developer</dd>
+                            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">{jobDetails.description}</dd>
                         </div>
                         <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <dt className="text-sm/6 font-medium text-gray-900">Company</dt>
-                            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">margotfoster@example.com</dd>
+                            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">{jobDetails.company}</dd>
                         </div>
                         <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <dt className="text-sm/6 font-medium text-gray-900">Created By</dt>
-                            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">margotfoster@example.com</dd>
+                            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">{jobDetails.createdBy}</dd>
                         </div>
                         <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <dt className="text-sm/6 font-medium text-gray-900">Location</dt>
-                            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">$120,000</dd>
+                            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">{jobDetails.location}</dd>
                         </div>
                         <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <dt className="text-sm/6 font-medium text-gray-900">Type</dt>
-                            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">$120,000</dd>
+                            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">{jobDetails.type}</dd>
                         </div>
                         <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <dt className="text-sm/6 font-medium text-gray-900">Salary</dt>
-                            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">$120,000</dd>
+                            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">${jobDetails.salary}</dd>
                         </div>
                         <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <dt className="text-sm/6 font-medium text-gray-900">Attachments</dt>
@@ -68,7 +118,7 @@ function Page() {
                             </button>
                         </div>
                     </dl>
-                </div>
+                </form>
             </div>
         </>
     );
