@@ -28,5 +28,10 @@ export const ApplicationsService = {
             cv: `${bucketName}/${fileName}`
         });
         return createApplication;
+    },
+
+    async getApplicationByUserId(userId: string) {
+      const getApplicationByUser = await ApplicationsSchema.find({user: userId});
+      return getApplicationByUser;
     }
 }
