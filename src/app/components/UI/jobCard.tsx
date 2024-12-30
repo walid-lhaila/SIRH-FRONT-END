@@ -1,6 +1,7 @@
 import React from 'react';
+import Link from "next/link";
 
-function JobCard({ location, type, title, description, company, createdBy }) {
+function JobCard({ location, type, title, description, company, createdBy, id }) {
     return (
         <article className="flex max-w-2xl flex-col items-start justify-between px-3 border-r border-gray-200 ">
             <div className="flex items-center gap-x-4 text-xs">
@@ -27,10 +28,10 @@ function JobCard({ location, type, title, description, company, createdBy }) {
                         <p className="text-gray-600">{company}</p>
                     </div>
                 </div>
-                <button
+                <Link href={`/routes/home/${id}`}
                     className="bg-sky-500 py-2 px-8 rounded text-white font-bold font-serif hover:bg-sky-600 duration-500">
                     Détails
-                </button>
+                </Link>
             </div>
         </article>
     );
