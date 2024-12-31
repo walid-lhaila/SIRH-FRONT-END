@@ -3,13 +3,23 @@ import {ApplicationsController} from "@/lib/backend/controllers/applicationsCont
 
 
 export async function GET(req: NextRequest) {
-    const token = req.headers.get('Authorization')?.split(' ')[1];
-    if(!token) {
+    try {
+        const authHeader = req.headers.get('authorization');
+        const token = authHeader ? authHeader.split(' ')[1] : null;
+
+        if (!token) {
+            return NextResponse.json({
+                success: false,
+                message: 'No Token Provided'
+            }, { status: 401 });
+        }
+
+        const result = await ApplicationsController.getApplicationByUserId(token);
+        return NextResponse.json(result.data, { status: result.status });
+    } catch (error) {
         return NextResponse.json({
             success: false,
-            message: 'No Token Provider'
-        }, {status: 401});
+            message: 'Internal Server Error',
+        }, { status: 500 });
     }
-    const result = await ApplicationsController.getApplicationByUserId(token);
-    return NextResponse.json(result.data, { status: result.status });
 }
