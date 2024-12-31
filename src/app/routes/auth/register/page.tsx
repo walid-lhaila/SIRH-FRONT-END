@@ -64,6 +64,7 @@ function Page() {
                                 <div id="clientForm" className="w-full">
                                     <form onSubmit={handleSubmit}
                                         className="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2 ">
+
                                         <Input handleChange={handleChange} label="First Name" name="firstName" value={formData.firstName} placeholder="Walid" type="text" className="text-black" />
 
                                         <Input handleChange={handleChange} label="Last Name" name="lastName" value={formData.lastName} placeholder="Lhaila" type="text" className="text-black" />
@@ -73,7 +74,6 @@ function Page() {
                                         <Input handleChange={handleChange} label="Username" name="username" value={formData.username} placeholder="example@1" type="text" className="text-black" />
 
                                         <Input handleChange={handleChange} label="Password" name="password" value={formData.password} placeholder="***********" type="password" className="text-black" />
-
 
                                         <button type="submit"
                                                 className="flex items-center justify-between w-full px-6 h-12 mt-7 text-sm tracking-wide text-black capitalize transition-colors duration-300 transform bg-gradient-to-r from-blue-600 via-blue-400 to-white rounded-lg hover:bg-gradient-to-l from-blue-100 via-blue-400 to-blue-600 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">

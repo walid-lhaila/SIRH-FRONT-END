@@ -7,6 +7,7 @@ function ApplicationCard({  location, type, title, description, company, created
         accepted: "bg-green-200 text-green-600",
         rejected: "bg-red-200 text-red-600",
     };
+
     return (
         <article className="flex max-w-2xl flex-col items-start justify-between px-3 border-r border-gray-200 ">
             <div className="flex justify-between text-xs w-full">
