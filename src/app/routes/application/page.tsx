@@ -1,9 +1,17 @@
 "use client"
-import React from 'react';
+import React, {useEffect} from 'react';
 import Navbar from "@/app/components/navbar";
 import ApplicationCard from "@/app/components/UI/applicationCard";
+import {useAppDispatch, useAppSelector} from "@/lib/frontend/redux/hooks";
+import {getAllApplication} from "@/lib/frontend/redux/slices/applicationSlice";
 
 function Page() {
+    const dispatch = useAppDispatch();
+    const { applications } = useAppSelector((state) => state.application);
+    useEffect(() => {
+        dispatch(getAllApplication());
+    }, [dispatch]);
+
     return (
         <div className="bg-white">
             <Navbar/>
@@ -28,17 +36,9 @@ function Page() {
                             </div>
                             <div
                                 className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                                <ApplicationCard
-                                    key="1"
-                                    id="1"
-                                    status="accepted"
-                                    title="Frontend Developer"
-                                    location="San Francisco, CA"
-                                    type="Full-Time"
-                                    company="Tech Corp"
-                                    description="We are looking for a talented Frontend Developer to join our team and build amazing web applications."
-                                    createdBy="HR Team"
-                                />
+                                {applications.map((application) => (
+                                    <ApplicationCard key={application._id} id={application._id} status={application.status} title={application.title} location={application.location} type={application.type} company={application.company} description={application.description} createdBy={application.createdBy}/>
+                                ))}
 
                             </div>
                         </div>

@@ -13,6 +13,22 @@ interface ApplicationData {
     status: 'pending' | 'accepted' | 'rejected';
 }
 
+
+interface ApplicationState {
+    applications: [];
+    application: any | null;
+    isLoading: boolean;
+    error: string | null;
+}
+
+const initialState: ApplicationState ={
+    applications: [],
+    application: null,
+    isLoading: false,
+    error: null,
+};
+
+
 export const apply = createAsyncThunk(
     'application/apply',
     async(applicationData: ApplicationData, {rejectWithValue}) => {
@@ -40,17 +56,24 @@ export const apply = createAsyncThunk(
 )
 
 
-interface ApplicationState {
-    application: any | null;
-    isLoading: boolean;
-    error: string | null;
-}
+export const getAllApplication = createAsyncThunk(
+    'application/getAll',
+    async (_, {rejectWithValue}) => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await axios.get('http://localhost:3000/api/application', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+            return response.data.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data);
+        }
+    }
+);
 
-const initialState: ApplicationState ={
-    application: null,
-    isLoading: false,
-    error: null,
-};
+
 
 const applicationSlice = createSlice({
     name: 'application',
@@ -67,6 +90,18 @@ const applicationSlice = createSlice({
                 state.application = action.payload;
             })
             .addCase(apply.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload as string;
+            })
+            .addCase(getAllApplication.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(getAllApplication.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.applications = action.payload;
+            })
+            .addCase(getAllApplication.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload as string;
             });
