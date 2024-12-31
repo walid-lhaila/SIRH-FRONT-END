@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { AuthController } from "@/lib/backend/controllers/authController";
 
-export async function POST(request: NextRequest) {
-    const body = await request.json();
+export async function POST(request: NextRequest | { json: () => Promise<any> }) {
+    const body = request.json ? await request.json() : request.body;
 
     const req = { body };
     let statusCode = 200;
@@ -15,15 +15,13 @@ export async function POST(request: NextRequest) {
         },
         json: (data: any) => {
             responseBody = data;
-            return NextResponse.json(data, { status: statusCode });
-        }
+        },
     };
 
     await AuthController.register(req as any, res as any);
 
-    return new NextResponse(JSON.stringify(responseBody), {
+    return {
         status: statusCode,
-        headers: { 'Content-Type': 'application/json' }
-    });
+        body: JSON.stringify(responseBody),
+    };
 }
-
