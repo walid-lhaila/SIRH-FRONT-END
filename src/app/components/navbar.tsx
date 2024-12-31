@@ -51,9 +51,9 @@ function Navbar() {
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
                     {logged && username ? (
                         <p className="text-black font-medium font-serif text-xl underline">{username}</p>
-                    ) : <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+                    ) : <Link href="/routes/auth/login" className="text-sm font-semibold leading-6 text-gray-900">
                         Log in <span aria-hidden="true">&rarr;</span>
-                    </a>
+                    </Link>
                     }
 
                 </div>
