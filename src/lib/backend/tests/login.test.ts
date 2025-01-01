@@ -1,7 +1,6 @@
-import request from "supertest";
-import express from "express";
+import { NextRequest, NextResponse } from "next/server";
 import { POST } from "@/app/api/auth/login/route";
-import * as AuthController from "@/lib/backend/controllers/authController";
+import { AuthController } from "@/lib/backend/controllers/authController";
 
 jest.mock("@/lib/backend/controllers/authController", () => ({
     AuthController: {
@@ -10,9 +9,7 @@ jest.mock("@/lib/backend/controllers/authController", () => ({
 }));
 
 jest.mock("next/server", () => ({
-    NextRequest: jest.fn().mockImplementation((obj) => ({
-        json: () => Promise.resolve(obj.body),
-    })),
+    NextRequest: jest.fn(),
     NextResponse: {
         json: jest.fn().mockImplementation((body, init) => ({
             status: init?.status || 200,
@@ -22,17 +19,15 @@ jest.mock("next/server", () => ({
 }));
 
 describe("Login API - POST Handler", () => {
-    const app = express();
-
-    beforeAll(() => {
-        app.use(express.json());
-        app.post("/api/auth/login", async (req, res) => {
-            const result = await POST({ body: req.body });
-            res.status(result.status).json(await result.json());
-        });
+    beforeEach(() => {
+        jest.clearAllMocks();
     });
 
     it("should successfully log in a user", async () => {
+        const mockRequest = {
+            json: jest.fn().mockResolvedValue({ username: "testuser", password: "password123" }),
+        } as unknown as NextRequest;
+
         const mockResponse = {
             success: true,
             message: "Login Successfully",
@@ -42,49 +37,55 @@ describe("Login API - POST Handler", () => {
             },
         };
 
-        (AuthController.AuthController.login as jest.Mock).mockImplementation(async (req, res) => {
+        (AuthController.login as jest.Mock).mockImplementation((req, res) => {
             res.status(200).json(mockResponse);
         });
 
-        const response = await request(app)
-            .post("/api/auth/login")
-            .send({ username: "testuser", password: "password123" });
+        const response = await POST(mockRequest);
+        const responseBody = await response.json();
 
         expect(response.status).toBe(200);
-        expect(response.body).toEqual(mockResponse);
+        expect(responseBody).toEqual(mockResponse);
     });
 
     it("should return 400 for missing fields", async () => {
+        const mockRequest = {
+            json: jest.fn().mockResolvedValue({}),
+        } as unknown as NextRequest;
+
         const mockResponse = {
             success: false,
-            message: "Username and password are required",
+            message: "username and password are required",
         };
 
-        (AuthController.AuthController.login as jest.Mock).mockImplementation(async (req, res) => {
+        (AuthController.login as jest.Mock).mockImplementation((req, res) => {
             res.status(400).json(mockResponse);
         });
 
-        const response = await request(app).post("/api/auth/login").send({});
+        const response = await POST(mockRequest);
+        const responseBody = await response.json();
 
         expect(response.status).toBe(400);
-        expect(response.body).toEqual(mockResponse);
+        expect(responseBody).toEqual(mockResponse);
     });
 
-    it("should return 401 for invalid credentials", async () => {
-        const mockResponse = {
-            success: false,
-            message: "Invalid credentials",
-        };
+    it("should return 500 for internal server error", async () => {
+        const mockRequest = {
+            json: jest.fn().mockResolvedValue({ username: "testuser", password: "password123" }),
+        } as unknown as NextRequest;
 
-        (AuthController.AuthController.login as jest.Mock).mockImplementation(async (req, res) => {
-            res.status(401).json(mockResponse);
+        (AuthController.login as jest.Mock).mockImplementation(() => {
+            throw new Error("Internal Server Error");
         });
 
-        const response = await request(app)
-            .post("/api/auth/login")
-            .send({ username: "wronguser", password: "wrongpassword" });
+        const response = await POST(mockRequest);
+        const responseBody = await response.json();
 
-        expect(response.status).toBe(401);
-        expect(response.body).toEqual(mockResponse);
+        expect(response.status).toBe(500);
+        expect(responseBody).toEqual({
+            success: false,
+            message: "Internal server error",
+        });
     });
 });
+
