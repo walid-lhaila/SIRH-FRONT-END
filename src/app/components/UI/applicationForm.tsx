@@ -55,9 +55,13 @@ function ApplicationForm({title, description, company, createdBy, location, type
             status: 'pending',
         };
 
-        const result = await dispatch(apply(applicationData));
-        if(apply.fulfilled.match(result)){
-            toast.success('Applying Successfully');
+        if (applicationData.cv) {
+            const result = await dispatch(apply(applicationData));
+            if (apply.fulfilled.match(result)) {
+                toast.success('Applying Successfully');
+            }
+        } else {
+            toast.error('Please upload a valid CV');
         }
     }
     return (
