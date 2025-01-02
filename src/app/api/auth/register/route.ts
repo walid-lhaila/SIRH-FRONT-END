@@ -29,28 +29,37 @@ interface CustomResponse {
     json: (data: ResponseBody) => void;
 }
 
+
 export async function POST(request: NextRequest) {
-    const body: RegisterRequestBody = await request.json();
+    try {
+        const body: RegisterRequestBody = await request.json();
 
-    const req = { body };
+        const req = { body };
 
-    let statusCode = 200;
-    let responseBody: ResponseBody = { success: true, message: "Request processed successfully" };
+        let statusCode = 200;
+        let responseBody: ResponseBody = { success: true, message: "Request processed successfully" };
 
-    const res: CustomResponse = {
-        status: (code: number) => {
-            statusCode = code;
-            return res;
-        },
-        json: (data: ResponseBody) => {
-            responseBody = data;
-        },
-    };
+        const res: CustomResponse = {
+            status: (code: number) => {
+                statusCode = code;
+                return res;
+            },
+            json: (data: ResponseBody) => {
+                responseBody = data;
+            },
+        };
 
-    await AuthController.register(req, res);
+        await AuthController.register(req, res);
 
-    return {
-        status: statusCode,
-        body: JSON.stringify(responseBody),
-    };
+        return new Response(JSON.stringify(responseBody), {
+            status: statusCode,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    } catch (error) {
+        console.error('Registration error:', error);
+        return new Response(JSON.stringify({ success: false, message: 'Internal server error' }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
 }
