@@ -5,30 +5,30 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 
 export const AuthController = {
-    async register(req: NextApiRequest, res: NextApiResponse) {
+    async register({ body }: { body: RegisterRequestBody }) {
         try {
             await dbConnect();
-            const { firstName, lastName, username, email, password } = req.body;
+            const { firstName, lastName, username, email, password } = body;
 
             if (!firstName || !lastName || !username || !email || !password) {
-                return res.status(400).json({
+                return {
                     success: false,
                     message: 'All fields are required',
-                });
+                };
             }
 
             const newUser = await AuthService.register({ firstName, lastName, username, email, password });
-            return res.status(201).json({
+            return {
                 success: true,
                 message: 'User registered successfully',
                 data: newUser,
-            });
+            };
         } catch (error) {
             console.error('Registration Failed:', error);
-            return res.status(500).json({
+            return {
                 success: false,
-                message: 'Internal Server Error'
-            });
+                message: 'Internal Server Error',
+            };
         }
     },
 
