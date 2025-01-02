@@ -1,6 +1,16 @@
 import React from 'react';
 
-function Input({name, placeholder, value, type, label, className, handleChange}) {
+interface InputProps {
+    name: string;
+    placeholder: string;
+    value: string;
+    type: string;
+    label: string;
+    className: string;
+    handleChange: string;
+}
+
+function Input({name, placeholder, value, type, label, className, handleChange}: InputProps) {
     return (
         <div>
             <label className="block mb-2 text-sm text-gray-700 font-serif ">{label}</label>

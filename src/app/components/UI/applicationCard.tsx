@@ -2,7 +2,19 @@ import React from 'react';
 import Link from "next/link";
 import Image from "next/image";
 
-function ApplicationCard({  location, type, title, description, company, createdBy, id, status}) {
+interface ApplicationCardProps {
+    location: string;
+    type: string;
+    title: string;
+    description: string;
+    company: string;
+    createdBy: string;
+    id: string;
+    status: 'pending' | 'accepted' | 'rejected';
+}
+
+
+function ApplicationCard({  location, type, title, description, company, createdBy, id, status} : ApplicationCardProps) {
     const statusStyles = {
         pending: "bg-sky-200 text-sky-600",
         accepted: "bg-green-200 text-green-600",

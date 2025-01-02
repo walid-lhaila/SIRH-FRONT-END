@@ -4,7 +4,17 @@ import {useAppDispatch} from "@/lib/frontend/redux/hooks";
 import {apply} from "@/lib/frontend/redux/slices/applicationSlice";
 import {useRouter} from "next/navigation";
 
-function ApplicationForm({title, description, company, createdBy, location, type, salary}) {
+interface ApplicationFormProps {
+    location: string;
+    type: string;
+    title: string;
+    description: string;
+    company: string;
+    createdBy: string;
+    salary: string;
+}
+
+function ApplicationForm({title, description, company, createdBy, location, type, salary}: ApplicationFormProps) {
     const dispatch = useAppDispatch();
     const router = useRouter()
     const [cv, setCv] = useState<File | null>(null);
