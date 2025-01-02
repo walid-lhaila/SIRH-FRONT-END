@@ -13,7 +13,7 @@ interface ApplicationData {
     location: string;
     type: string;
     status: string;
-    cv: File | null;
+    cv: File;
 }
 
 interface ApplicationFormProps {
@@ -45,7 +45,7 @@ function ApplicationForm({title, description, company, createdBy, location, type
         }
 
         const applicationData: ApplicationData = {
-            cv: cv,
+            cv: cv!,
             title: title,
             description: description,
             company: company,
