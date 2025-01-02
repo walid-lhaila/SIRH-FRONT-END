@@ -55,7 +55,7 @@ function ApplicationForm({title, description, company, createdBy, location, type
             status: 'pending',
         };
 
-        if (applicationData.cv) {
+        if (applicationData.cv !== null) {
             const result = await dispatch(apply(applicationData));
             if (apply.fulfilled.match(result)) {
                 toast.success('Applying Successfully');
