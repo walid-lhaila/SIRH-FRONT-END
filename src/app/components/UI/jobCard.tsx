@@ -2,7 +2,17 @@ import React from 'react';
 import Link from "next/link";
 import Image from "next/image";
 
-function JobCard({ location, type, title, description, company, createdBy, id }) {
+interface JobCardProps {
+    location: string;
+    type: string;
+    title: string;
+    description: string;
+    company: string;
+    createdBy: string;
+    id: string;
+}
+
+function JobCard({ location, type, title, description, company, createdBy, id }: JobCardProps) {
     return (
         <div className="flex max-w-2xl flex-col items-start justify-between px-3 border-r border-gray-200 ">
             <div className="flex items-center gap-x-4 text-xs">

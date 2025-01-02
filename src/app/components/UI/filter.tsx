@@ -1,6 +1,8 @@
 import React from 'react';
 import UseGetAllCities from "@/app/hooks/useGetAllCities";
 
+
+
 function Filter({ onLocationChange, onTypeChange }) {
         const { cities } = UseGetAllCities();
     return (
