@@ -12,7 +12,7 @@ interface ApplicationData {
     createdBy: string;
     location: string;
     type: string;
-    status: string;
+    status: "pending" | "accepted" | "rejected";
     cv: File;
 }
 
