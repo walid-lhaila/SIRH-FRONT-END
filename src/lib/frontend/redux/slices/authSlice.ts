@@ -16,7 +16,7 @@ interface LoginData {
 }
 
 interface AuthState {
-    user: any | null;
+    user: null;
     token: string;
     isLoading: boolean;
     error: string | null;

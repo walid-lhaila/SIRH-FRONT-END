@@ -76,7 +76,7 @@ describe('Application API - Get All Applications (Supertest)', () => {
     });
 
     it('should handle internal server error', async () => {
-        (ApplicationsController.getApplicationByUserId as jest.Mock).mockRejectedValue(new Error('Database error'));
+        (ApplicationsController.getApplicationByUserId as jest.Mock).mockRejectedValue(new Error('Internal Server Error'));
 
         const response = await request(app)
             .get('/api/application')

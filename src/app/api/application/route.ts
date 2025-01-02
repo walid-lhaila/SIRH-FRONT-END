@@ -17,9 +17,10 @@ export async function GET(req: NextRequest) {
         const result = await ApplicationsController.getApplicationByUserId(token);
         return NextResponse.json(result.data, { status: result.status });
     } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
         return NextResponse.json({
             success: false,
-            message: 'Internal Server Error',
+            message: errorMessage,
         }, { status: 500 });
     }
 }

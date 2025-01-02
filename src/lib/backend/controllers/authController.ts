@@ -1,5 +1,4 @@
 import { AuthService } from "@/lib/backend/services/authService";
-import UsersSchema from "@/lib/backend/models/usersSchema";
 import dbConnect from "@/lib/backend/database/database";
 import { NextApiRequest, NextApiResponse } from 'next';
 
