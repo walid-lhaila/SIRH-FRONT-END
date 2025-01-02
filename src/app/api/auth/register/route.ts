@@ -9,11 +9,11 @@ interface RegisterRequestBody {
     email: string;
 }
 
-
 export async function POST(request: NextRequest) {
     try {
         const body: RegisterRequestBody = await request.json();
 
+        // Pass body directly to the register function
         const result = await AuthController.register({ body });
 
         return new Response(JSON.stringify(result), {
