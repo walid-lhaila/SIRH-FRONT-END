@@ -2,7 +2,7 @@ import request from 'supertest';
 import express from 'express';
 import { POST } from '@/app/api/apply/route';
 import { ApplicationsController } from '@/lib/backend/controllers/applicationsController';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 
 jest.mock('@/lib/backend/controllers/applicationsController', () => ({
     ApplicationsController: {

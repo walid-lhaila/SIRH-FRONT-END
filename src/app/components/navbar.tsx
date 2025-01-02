@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Link from "next/link";
+import Image from "next/image";
 
 function Navbar() {
     const [username, setUsername] = useState('');
@@ -65,10 +66,12 @@ function Navbar() {
                     <div className="flex items-center justify-between">
                         <a href="#" className="-m-1.5 p-1.5">
                             <span className="sr-only">Your Company</span>
-                            <img
+                            <Image
                                 className="h-8 w-auto"
-                                src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
+                                src="https://nextjs.org/icons/next.svg"
                                 alt="Company Logo"
+                                width={32}
+                                height={32}
                             />
                         </a>
                         <button type="button" className="-m-2.5 rounded-md p-2.5 text-gray-700">

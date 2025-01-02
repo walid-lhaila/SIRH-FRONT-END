@@ -9,7 +9,7 @@ function UseGetAllCities() {
                 const response = await axios.get('/moroccan-cities.json')
                 setCities(response.data)
             } catch (error) {
-                console.error('Error Fetching Cities')
+                console.error( error ||'Error Fetching Cities')
             }
         }
         getAllCities()

@@ -16,7 +16,7 @@ interface ApplicationData {
 
 interface ApplicationState {
     applications: [];
-    application: any | null;
+    application: null;
     isLoading: boolean;
     error: string | null;
 }
@@ -49,7 +49,7 @@ export const apply = createAsyncThunk(
                 },
             });
             return response.data;
-        } catch (error: any) {
+        } catch (error: string) {
             return rejectWithValue(error.response?.data || 'Something Went Wrong')
         }
     }
@@ -67,7 +67,7 @@ export const getAllApplication = createAsyncThunk(
                 }
             });
             return response.data.data;
-        } catch (error: any) {
+        } catch (error: string) {
             return rejectWithValue(error.response?.data);
         }
     }

@@ -1,27 +1,58 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { AuthController } from "@/lib/backend/controllers/authController";
 
-export async function POST(request: NextRequest | { json: () => Promise<any> }) {
-    const body = request.json ? await request.json() : request.body;
+interface RegisterRequestBody {
+    firstName: string;
+    lastName: string;
+    username: string;
+    password: string;
+    email: string;
+}
 
-    const req = { body };
-    let statusCode = 200;
-    let responseBody = {};
-
-    const res = {
-        status: (code: number) => {
-            statusCode = code;
-            return res;
-        },
-        json: (data: any) => {
-            responseBody = data;
-        },
+interface ResponseBody {
+    success: boolean;
+    message: string;
+    data?: {
+        user: {
+            id: string;
+            username: string;
+            firstName: string;
+            lastName: string;
+            email: string;
+        };
+        token: string;
     };
+}
 
-    await AuthController.register(req as any, res as any);
+interface CustomResponse {
+    status: (code: number) => CustomResponse;
+    json: (data: ResponseBody) => void;
+}
 
-    return {
-        status: statusCode,
-        body: JSON.stringify(responseBody),
-    };
+export async function POST(request: NextRequest) {
+    try {
+        const body: RegisterRequestBody = await request.json();
+
+        let statusCode = 200;
+        let responseBody: ResponseBody = { success: true, message: "Request processed successfully" };
+
+        const res: CustomResponse = {
+            status: (code: number) => {
+                statusCode = code;
+                return res;
+            },
+            json: (data: ResponseBody) => {
+                responseBody = data;
+            },
+        };
+
+        await AuthController.register({ body }, res);
+
+        return NextResponse.json(responseBody, { status: statusCode });
+    } catch (error) {
+        return NextResponse.json(
+            { success: false, message: error instanceof Error ? error.message : "Internal server error" },
+            { status: 500 }
+        );
+    }
 }
