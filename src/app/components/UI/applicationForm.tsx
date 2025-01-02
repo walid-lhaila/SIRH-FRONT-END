@@ -4,6 +4,18 @@ import {useAppDispatch} from "@/lib/frontend/redux/hooks";
 import {apply} from "@/lib/frontend/redux/slices/applicationSlice";
 import {useRouter} from "next/navigation";
 
+
+interface ApplicationData {
+    title: string;
+    description: string;
+    company: string;
+    createdBy: string;
+    location: string;
+    type: string;
+    status: string;
+    cv: File | null;
+}
+
 interface ApplicationFormProps {
     location: string;
     type: string;
@@ -32,17 +44,18 @@ function ApplicationForm({title, description, company, createdBy, location, type
             return;
         }
 
-        const formData = new FormData();
-        formData.append('cv', cv);
-        formData.append('title', title);
-        formData.append('description', description);
-        formData.append('company', company);
-        formData.append('createdBy', createdBy);
-        formData.append('location', location);
-        formData.append('type', type);
-        formData.append('status', 'pending');
+        const applicationData: ApplicationData = {
+            cv: cv,
+            title: title,
+            description: description,
+            company: company,
+            createdBy: createdBy,
+            location: location,
+            type: type,
+            status: 'pending',
+        };
 
-        const result = await dispatch(apply(formData));
+        const result = await dispatch(apply(applicationData));
         if(apply.fulfilled.match(result)){
             toast.success('Applying Successfully');
         }
