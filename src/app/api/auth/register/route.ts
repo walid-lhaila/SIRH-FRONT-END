@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { AuthController } from "@/lib/backend/controllers/authController";
 
 interface RegisterRequestBody {
@@ -30,29 +30,27 @@ interface CustomResponse {
 }
 
 export async function POST(request: NextRequest) {
-    try {
-        const body: RegisterRequestBody = await request.json();
+    const body: RegisterRequestBody = await request.json();
 
-        let statusCode = 200;
-        let responseBody: ResponseBody = { success: true, message: "Request processed successfully" };
+    const req = { body };
 
-        const res: CustomResponse = {
-            status: (code: number) => {
-                statusCode = code;
-                return res;
-            },
-            json: (data: ResponseBody) => {
-                responseBody = data;
-            },
-        };
+    let statusCode = 200;
+    let responseBody: ResponseBody = { success: true, message: "Request processed successfully" };
 
-        await AuthController.register({ body }, res);
+    const res: CustomResponse = {
+        status: (code: number) => {
+            statusCode = code;
+            return res;
+        },
+        json: (data: ResponseBody) => {
+            responseBody = data;
+        },
+    };
 
-        return NextResponse.json(responseBody, { status: statusCode });
-    } catch (error) {
-        return NextResponse.json(
-            { success: false, message: error instanceof Error ? error.message : "Internal server error" },
-            { status: 500 }
-        );
-    }
+    await AuthController.register(req, res);
+
+    return {
+        status: statusCode,
+        body: JSON.stringify(responseBody),
+    };
 }
