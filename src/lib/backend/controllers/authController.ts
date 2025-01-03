@@ -2,6 +2,13 @@ import { AuthService } from "@/lib/backend/services/authService";
 import dbConnect from "@/lib/backend/database/database";
 import { NextApiRequest, NextApiResponse } from 'next';
 
+interface RegisterRequestBody {
+    firstName: string;
+    lastName: string;
+    username: string;
+    password: string;
+    email: string;
+}
 
 
 export const AuthController = {

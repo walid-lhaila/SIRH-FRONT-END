@@ -3,13 +3,13 @@ import Link from "next/link";
 import Image from "next/image";
 
 interface ApplicationCardProps {
+    id: string | undefined;
     location: string;
     type: string;
     title: string;
     description: string;
     company: string;
     createdBy: string;
-    id: string;
     status: 'pending' | 'accepted' | 'rejected';
 }
 

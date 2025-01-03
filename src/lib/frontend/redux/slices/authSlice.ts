@@ -17,7 +17,7 @@ interface LoginData {
 
 interface AuthState {
     user: null;
-    token: string;
+    token: string | null;
     isLoading: boolean;
     error: string | null;
 }
@@ -29,7 +29,10 @@ export const register = createAsyncThunk(
             const response = await axios.post('http://localhost:3000/api/auth/register', userData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response.data);
+            if(error instanceof Error) {
+                return rejectWithValue(error.message || "Something Went Wrong");
+            }
+            return rejectWithValue('Something Went Wrong');
         }
     }
 );
@@ -45,7 +48,10 @@ export const login = createAsyncThunk(
             localStorage.setItem('id', user._id);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response.data);
+            if(error instanceof Error) {
+                return rejectWithValue(error.message || "Something Went Wrong");
+            }
+            return rejectWithValue('Something Went Wrong');
         }
     }
 );

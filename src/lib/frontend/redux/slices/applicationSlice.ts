@@ -3,6 +3,7 @@ import axios from "axios";
 
 
 interface ApplicationData {
+    _id?: string;
     title: string;
     description: string;
     location: string;
@@ -15,8 +16,8 @@ interface ApplicationData {
 
 
 interface ApplicationState {
-    applications: [];
-    application: null;
+    applications: ApplicationData[];
+    application: ApplicationData | null;
     isLoading: boolean;
     error: string | null;
 }
@@ -49,8 +50,11 @@ export const apply = createAsyncThunk(
                 },
             });
             return response.data;
-        } catch (error: string) {
-            return rejectWithValue(error.response?.data || 'Something Went Wrong')
+        } catch (error) {
+            if (error instanceof Error) {
+                return rejectWithValue(error.message || 'Something Went Wrong');
+            }
+            return rejectWithValue('Something Went Wrong');
         }
     }
 )
@@ -67,8 +71,11 @@ export const getAllApplication = createAsyncThunk(
                 }
             });
             return response.data.data;
-        } catch (error: string) {
-            return rejectWithValue(error.response?.data);
+        } catch (error) {
+            if(error instanceof Error){
+                return rejectWithValue(error.message || 'something Went Wrong');
+            }
+            return rejectWithValue('Something Went Wrong');
         }
     }
 );

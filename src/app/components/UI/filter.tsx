@@ -1,10 +1,16 @@
 import React from 'react';
 import UseGetAllCities from "@/app/hooks/useGetAllCities";
 
+interface FilterProps {
+    onLocationChange: (location: string) => void;
+    onTypeChange: (type: string) => void;
+}
 
-
-function Filter({ onLocationChange, onTypeChange }) {
-        const { cities } = UseGetAllCities();
+interface City {
+    name: string;
+}
+function Filter({ onLocationChange, onTypeChange }: FilterProps) {
+        const { cities }: { cities: City[] } = UseGetAllCities();
     return (
         <form className="max-w-sm w-[50%] flex items-center gap-4 pt-10">
 

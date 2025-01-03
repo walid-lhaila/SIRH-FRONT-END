@@ -4,6 +4,19 @@ import {useAppDispatch} from "@/lib/frontend/redux/hooks";
 import {apply} from "@/lib/frontend/redux/slices/applicationSlice";
 import {useRouter} from "next/navigation";
 
+
+interface ApplicationData {
+    _id?: string;
+    title: string;
+    description: string;
+    company: string;
+    createdBy: string;
+    location: string;
+    type: string;
+    status: "pending" | "accepted" | "rejected";
+    cv: File;
+}
+
 interface ApplicationFormProps {
     location: string;
     type: string;
@@ -11,10 +24,9 @@ interface ApplicationFormProps {
     description: string;
     company: string;
     createdBy: string;
-    salary: string;
 }
 
-function ApplicationForm({title, description, company, createdBy, location, type, salary}: ApplicationFormProps) {
+function ApplicationForm({title, description, company, createdBy, location, type}: ApplicationFormProps) {
     const dispatch = useAppDispatch();
     const router = useRouter()
     const [cv, setCv] = useState<File | null>(null);
@@ -32,19 +44,22 @@ function ApplicationForm({title, description, company, createdBy, location, type
             return;
         }
 
-        const formData = new FormData();
-        formData.append('cv', cv);
-        formData.append('title', title);
-        formData.append('description', description);
-        formData.append('company', company);
-        formData.append('createdBy', createdBy);
-        formData.append('location', location);
-        formData.append('type', type);
-        formData.append('status', 'pending');
+        const applicationData: ApplicationData = {
+            cv: cv!,
+            title: title,
+            description: description,
+            company: company,
+            createdBy: createdBy,
+            location: location,
+            type: type,
+            status: 'pending',
+        };
 
-        const result = await dispatch(apply(formData));
-        if(apply.fulfilled.match(result)){
+        const result = await dispatch(apply(applicationData));
+        if (apply.fulfilled.match(result)) {
             toast.success('Applying Successfully');
+        } else {
+            toast.error('Failed to apply');
         }
     }
     return (
@@ -74,10 +89,6 @@ function ApplicationForm({title, description, company, createdBy, location, type
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt className="text-sm/6 font-medium text-gray-900">Type</dt>
                         <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">{type}</dd>
-                    </div>
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                        <dt className="text-sm/6 font-medium text-gray-900">Salary</dt>
-                        <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">${salary}</dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt className="text-sm/6 font-medium text-gray-900">Attachments</dt>

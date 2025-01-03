@@ -17,14 +17,14 @@ function Page() {
         password: '',
     });
 
-    const handleChange = (e: React.ChangeEvent<HTMLFormElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value});
     };
 
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        await dispatch(register(formData));
-        if(register.fulfilled){
+        const result = await dispatch(register(formData));
+        if(register.fulfilled.match(result)){
             toast.success('registration successfully');
                 router.push('/routes/auth/login');
         } else {

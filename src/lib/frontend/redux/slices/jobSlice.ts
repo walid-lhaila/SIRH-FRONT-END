@@ -1,13 +1,14 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import axios, {AxiosError} from "axios";
+import axios from "axios";
 
 interface Job {
-    id: string;
+    _id: string;
     title: string;
     description: string;
     location: string;
     company: string;
     type: string
+    createdBy: string;
 }
 
 interface JobsState {
@@ -29,8 +30,10 @@ export const getAllJobs = createAsyncThunk(
             const response = await axios.get('http://localhost:4000/JOB/getAll');
             return response.data;
         } catch (error) {
-            const axiosError = error as AxiosError;
-            return rejectWithValue(axiosError.response?.data?.message || axiosError.message || 'Failed to fetch jobs');
+            if(error instanceof Error) {
+                return rejectWithValue(error.message || "Something Went Wrong");
+            }
+            return rejectWithValue('Something Went Wrong');
         }
     }
 );
