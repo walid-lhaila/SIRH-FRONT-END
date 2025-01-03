@@ -12,6 +12,12 @@ export const ApplicationsController = {
             await dbConnect();
 
             const secretKey = process.env.JWT_SECRET;
+
+            // Check if secretKey is defined
+            if (!secretKey) {
+                throw new Error('JWT_SECRET is not defined');
+            }
+
             const decoded = jwt.verify(token, secretKey);
 
             // Type guard to check if decoded is of type DecodedToken
@@ -74,6 +80,12 @@ export const ApplicationsController = {
         try {
             await dbConnect();
             const secretKey = process.env.JWT_SECRET;
+
+            // Check if secretKey is defined
+            if (!secretKey) {
+                throw new Error('JWT_SECRET is not defined');
+            }
+
             const decoded = jwt.verify(token, secretKey);
 
             // Type guard to check if decoded is of type DecodedToken
