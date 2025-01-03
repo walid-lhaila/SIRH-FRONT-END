@@ -31,9 +31,13 @@ export const AuthService = {
             throw new Error('Invalid Credentials');
         }
 
+        const secretKey = process.env.JWT_SECRET;
+        if(!secretKey) {
+            throw new Error('JWT_SECRET in not defined');
+        }
         const token = jwt.sign(
             {userId: user._id, username: user.username},
-            process.env.JWT_SECRET,
+            secretKey,
             { expiresIn: '1h'}
         );
         return {user, token}
