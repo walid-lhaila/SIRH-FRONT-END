@@ -2,12 +2,13 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios, {AxiosError} from "axios";
 
 interface Job {
-    id: string;
+    _id: string;
     title: string;
     description: string;
     location: string;
     company: string;
     type: string
+    createdBy: string;
 }
 
 interface JobsState {

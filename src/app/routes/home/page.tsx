@@ -7,10 +7,20 @@ import {getAllJobs} from "@/lib/frontend/redux/slices/jobSlice";
 import Search from "@/app/components/UI/search";
 import Filter from "@/app/components/UI/filter";
 
+interface Job {
+    _id: string;
+    title: string;
+    description: string;
+    location: string;
+    company: string;
+    type: string;
+    createdBy: string;
+}
+
 function Page() {
     const dispatch = useAppDispatch();
     const { items: jobs, loading, error } = useAppSelector((state) => state.jobs);
-    const [searchedJobs, setSearchedJobs] = useState([]);
+    const [searchedJobs, setSearchedJobs] = useState<Job[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedLocation, setSelectedLocation] = useState('');
     const [selectedType, setSelectedType] = useState('');

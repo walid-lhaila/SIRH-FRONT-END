@@ -1,14 +1,25 @@
 "use client"
 import React, {useEffect, useState} from 'react';
 import Navbar from "@/app/components/navbar";
+import Job from "@/lib/frontend/redux/slices/jobSlice";
 import {useAppDispatch, useAppSelector} from "@/lib/frontend/redux/hooks";
 import {getAllJobs} from "@/lib/frontend/redux/slices/jobSlice";
 import ApplicationForm from "@/app/components/UI/applicationForm";
 
+interface Job {
+    _id: string;
+    title: string;
+    description: string;
+    location: string;
+    company: string;
+    type: string;
+    createdBy: string;
+}
+
 
 function Page({params} : {params: {id: string}}) {
     const [loading, setLoading] = useState(true);
-    const [jobDetails, setJobDetails] = useState(null);
+    const [jobDetails, setJobDetails] = useState<Job | null>(null);
     const {  items: allJobs, loading: jobsLoading } = useAppSelector((state) => state.jobs);
     const dispatch = useAppDispatch();
     const jobId = params.id;
@@ -26,7 +37,7 @@ function Page({params} : {params: {id: string}}) {
     useEffect(() => {
         if (allJobs.length > 0) {
             const job = allJobs.find((job) => job._id === jobId);
-            setJobDetails(job);
+            setJobDetails(job || null);
         }
     }, [allJobs, jobId]);
 
@@ -68,7 +79,7 @@ function Page({params} : {params: {id: string}}) {
                     <h3 className="font-semibold text-5xl font-serif text-gray-900">Job Détails</h3>
                     <p className="mt-1 max-w-2xl text-sm/6 font-mono text-gray-700">Job details and application.</p>
                 </div>
-                     <ApplicationForm title={jobDetails.title} description={jobDetails.description} company={jobDetails.company} location={jobDetails.location} type={jobDetails.type} salary={jobDetails.salary} createdBy={jobDetails.createdBy} />
+                     <ApplicationForm title={jobDetails.title} description={jobDetails.description} company={jobDetails.company} location={jobDetails.location} type={jobDetails.type} createdBy={jobDetails.createdBy} />
             </div>
         </>
     );

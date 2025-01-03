@@ -6,6 +6,7 @@ import {useRouter} from "next/navigation";
 
 
 interface ApplicationData {
+    _id?: string;
     title: string;
     description: string;
     company: string;
@@ -23,10 +24,9 @@ interface ApplicationFormProps {
     description: string;
     company: string;
     createdBy: string;
-    salary: string;
 }
 
-function ApplicationForm({title, description, company, createdBy, location, type, salary}: ApplicationFormProps) {
+function ApplicationForm({title, description, company, createdBy, location, type}: ApplicationFormProps) {
     const dispatch = useAppDispatch();
     const router = useRouter()
     const [cv, setCv] = useState<File | null>(null);
@@ -55,13 +55,11 @@ function ApplicationForm({title, description, company, createdBy, location, type
             status: 'pending',
         };
 
-        if (applicationData.cv !== null) {
-            const result = await dispatch(apply(applicationData));
-            if (apply.fulfilled.match(result)) {
-                toast.success('Applying Successfully');
-            }
+        const result = await dispatch(apply(applicationData));
+        if (apply.fulfilled.match(result)) {
+            toast.success('Applying Successfully');
         } else {
-            toast.error('Please upload a valid CV');
+            toast.error('Failed to apply');
         }
     }
     return (
@@ -91,10 +89,6 @@ function ApplicationForm({title, description, company, createdBy, location, type
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt className="text-sm/6 font-medium text-gray-900">Type</dt>
                         <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">{type}</dd>
-                    </div>
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                        <dt className="text-sm/6 font-medium text-gray-900">Salary</dt>
-                        <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">${salary}</dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt className="text-sm/6 font-medium text-gray-900">Attachments</dt>

@@ -3,6 +3,7 @@ import axios from "axios";
 
 
 interface ApplicationData {
+    _id?: string;
     title: string;
     description: string;
     location: string;
@@ -15,8 +16,8 @@ interface ApplicationData {
 
 
 interface ApplicationState {
-    applications: [];
-    application: null;
+    applications: ApplicationData[];
+    application: ApplicationData | null;
     isLoading: boolean;
     error: string | null;
 }
