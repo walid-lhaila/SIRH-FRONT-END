@@ -58,6 +58,7 @@ function ApplicationForm({title, description, company, createdBy, location, type
         const result = await dispatch(apply(applicationData));
         if (apply.fulfilled.match(result)) {
             toast.success('Applying Successfully');
+            router.push('/routes/application');
         } else {
             toast.error('Failed to apply');
         }
