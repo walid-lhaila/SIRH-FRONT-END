@@ -50,7 +50,7 @@ export const apply = createAsyncThunk(
                 },
             });
             return response.data;
-        } catch (error: string) {
+        } catch (error) {
             return rejectWithValue(error.response?.data || 'Something Went Wrong')
         }
     }
