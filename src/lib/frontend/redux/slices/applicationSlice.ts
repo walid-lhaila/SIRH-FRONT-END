@@ -71,8 +71,11 @@ export const getAllApplication = createAsyncThunk(
                 }
             });
             return response.data.data;
-        } catch (error: string) {
-            return rejectWithValue(error.response?.data);
+        } catch (error) {
+            if(error instanceof Error){
+                return rejectWithValue(error.message || 'something Went Wrong');
+            }
+            return rejectWithValue('Something Went Wrong');
         }
     }
 );
