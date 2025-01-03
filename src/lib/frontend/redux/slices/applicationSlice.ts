@@ -51,7 +51,10 @@ export const apply = createAsyncThunk(
             });
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || 'Something Went Wrong')
+            if (error instanceof Error) {
+                return rejectWithValue(error.message || 'Something Went Wrong');
+            }
+            return rejectWithValue('Something Went Wrong');
         }
     }
 )
