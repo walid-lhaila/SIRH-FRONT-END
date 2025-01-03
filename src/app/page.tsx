@@ -1,10 +1,8 @@
-
+import LandingPage from '@/app/routes/home/page';
 export default function Home() {
   return (
     <>
-        <div>
-          <h1>walid</h1>
-        </div>
+        <LandingPage />
     </>
   );
 }
