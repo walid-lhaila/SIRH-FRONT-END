@@ -30,8 +30,10 @@ export const getAllJobs = createAsyncThunk(
             const response = await axios.get('http://localhost:4000/JOB/getAll');
             return response.data;
         } catch (error) {
-            const axiosError = error as AxiosError;
-            return rejectWithValue(axiosError.response?.data?.message || axiosError.message || 'Failed to fetch jobs');
+            if(error instanceof Error) {
+                return rejectWithValue(error.message || "Something Went Wrong");
+            }
+            return rejectWithValue('Something Went Wrong');
         }
     }
 );
