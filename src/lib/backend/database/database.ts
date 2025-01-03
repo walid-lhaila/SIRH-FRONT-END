@@ -5,10 +5,6 @@ config();
 
 const MONGODB_URI: string | undefined = process.env.MONGODB_URI;
 
-if (!MONGODB_URI) {
-    throw new Error('Please define the MONGODB_URI environment variable inside .env');
-}
-
 async function dbConnect(): Promise<Connection> {
     console.log('Connecting to MongoDB...');
     try {
